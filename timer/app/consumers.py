@@ -6,7 +6,7 @@ import time
 from channels import Channel
 from datetime import datetime, timedelta
 
-from  .models import Timer
+from .models import Timer
 
 LOGGER = logging.getLogger(__name__)
 
@@ -45,7 +45,7 @@ def ws_receive(message):
             print(timer_payload, '--------------------------------------')
             Channel('timer.start').send(timer_payload)
 
-    print("Received payload : ", payload)
+    print("Received payload : ", timer_payload)
 
 
 def ws_disconnect(message):
@@ -54,18 +54,21 @@ def ws_disconnect(message):
 
 
 def launch(message):
-    print("message received")
-    timer_detail = json.loads(message['text'])
+    print("message received", message.content)
+    timer_detail = message.content
     timer_id = int(timer_detail['id'])
     duration = timer_detail['duration']
     reply_channel = message['reply_channel']
-    end_time = datetime.now() + timedelta(minutes=int(duration))
+    end_time = datetime.now() + timedelta(seconds=int(duration))
     count = int(math.ceil((duration*60)/4))
     timer_obj = Timer.objects.get(id=timer_id)
     timer_obj.started = datetime.now()
 
+    print("before while")
     while datetime.now() < end_time:
         print("sleeping for 4 seconds.")
         time.sleep(4)
         count -= 1
         Channel(reply_channel).send({'count': count, 'id': timer_id})
+
+    print("after while")

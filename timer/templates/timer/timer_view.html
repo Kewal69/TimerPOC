@@ -30,11 +30,13 @@
             var ws_path = "/timer/";
             console.log("Connecting to " + ws_path);
 
-            var webSocketBridge = new channels.WebSocketBridge();
+            webSocketBridge = new channels.WebSocketBridge();
             webSocketBridge.connect(ws_path);
 
             // Handle incoming messages
-
+            webSocketBridge.listen(function(action, stream) {
+              console.log(action, stream);
+            });
 
             // Helpful debugging
             webSocketBridge.socket.onopen = function () {
@@ -50,8 +52,6 @@
     function launch_timer(){
            console.log("afdgdsg");
            var id = $("#timer_id").text();
-           alert("timer id : "+ id);
-
            webSocketBridge.send({
                 "command": "status",
                 "id": id,

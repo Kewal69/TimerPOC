@@ -3,7 +3,7 @@ import uuid
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, render
 
-from .models import Timer
+from app.models import Timer
 
 
 def index(request):
@@ -17,7 +17,6 @@ def start_timer(request):
         timer = Timer.objects.create(duration=duration)
     else:
         timer = Timer.objects.first()
-    print(timer.id,'----------------------')
     context = {'duration': duration, 'timer': timer}
 
     return render(request, 'timer/timer_view.html', context)

@@ -26,7 +26,21 @@
             webSocketBridge.connect(ws_path);
 
             // Handle incoming messages
+            // webSocketBridge.listen function(data){}
 
+            webSocketBridge.listen(function(data) {
+                    console.log("Got message " + data);
+                    // Create the inner content of the post div
+                    var content = "<h2>" + data.created + "</h2>" + data.html;
+                    // See if there's a div to replace it in, or if we should add a new one
+                    var existing = $("div[data-post-id=" + data.id + "]");
+                    if (existing.length) {
+                        existing.html(content);
+                    } else {
+                        var newdiv = $("<div class='post' data-post-id='" + data.id + "'>" + content + "</div>");
+                        $("#posts").prepend(newdiv);
+                    }
+                });
 
             // Helpful debugging
             webSocketBridge.socket.onopen = function () {

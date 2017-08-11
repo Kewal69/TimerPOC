@@ -8,5 +8,5 @@ ASGI applications at "multichat.asgi:channel_layer" as their channel layer.
 import os
 from channels.asgi import get_channel_layer
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "timer.timer.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "timer.settings")
 channel_layer = get_channel_layer()
