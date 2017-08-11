@@ -1,0 +1,62 @@
+{% extends "timer/base.html" %}
+
+{% block title %}Timer Example{% endblock %}
+{% block header_text %}Timer Example{% endblock %}
+
+{% block content %}
+    <p>
+        <table>
+            <tr>
+                <th> Timer ID </th>
+                <th> Timer Duration </th>
+                <th> Approx. Completion Time</th>
+            </tr>
+            <tr>
+                <td id="timer_id"> {{ timer.id }} </td>
+                <td> {{ timer.duration }}</td>
+                <td> {{ timer.end_time }} </td>
+            </tr>
+        </table>
+    </p>
+    <button type="button" class="button" onclick="launch_timer()"> Start Timer</button>
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script>
+
+            // Correctly decide between ws:// and wss://
+            var ws_path = "/timer/";
+            console.log("Connecting to " + ws_path);
+
+            var webSocketBridge = new channels.WebSocketBridge();
+            webSocketBridge.connect(ws_path);
+
+            // Handle incoming messages
+
+
+            // Helpful debugging
+            webSocketBridge.socket.onopen = function () {
+                console.log("Connected to chat socket");
+            };
+            webSocketBridge.socket.onclose = function () {
+                console.log("Disconnected from chat socket");
+            };
+
+
+</script>
+<script>
+    function launch_timer(){
+           console.log("afdgdsg");
+           var id = $("#timer_id").text();
+           alert("timer id : "+ id);
+
+           webSocketBridge.send({
+                "command": "status",
+                "id": id,
+            });
+        }
+
+</script>
+{% endblock %}

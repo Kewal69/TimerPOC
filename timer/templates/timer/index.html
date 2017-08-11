@@ -1,0 +1,41 @@
+{% extends "timer/base.html" %}
+
+{% block title %}Timer Example{% endblock %}
+{% block header_text %}Timer Example{% endblock %}
+
+{% block content %}
+<div class="form">
+    <form id="timer-form" method="POST" action="/timer/start/">
+        {% csrf_token %}
+        <input type="text" class="form" id="timer_duration" name="duration">
+        <button type="submit" class="button" onclick="document.forms[0].submit()"> Create Timer </button>
+    </form>
+</div>
+
+{% endblock %}
+
+
+{% block extra_body %}
+<script>
+        $(function () {
+            // Correctly decide between ws:// and wss://
+            var ws_path = "/timer/";
+            console.log("Connecting to " + ws_path);
+
+            var webSocketBridge = new channels.WebSocketBridge();
+            webSocketBridge.connect(ws_path);
+
+            // Handle incoming messages
+
+
+            // Helpful debugging
+            webSocketBridge.socket.onopen = function () {
+                console.log("Connected to chat socket");
+            };
+            webSocketBridge.socket.onclose = function () {
+                console.log("Disconnected from chat socket");
+            }
+        });
+
+</script>
+{% endblock %}
